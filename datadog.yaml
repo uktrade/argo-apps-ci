@@ -1,0 +1,26 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: datadog-agent
+  namespace:  tools
+    
+spec:
+  destination:
+    namespace: monitoring
+    server: https://kubernetes.default.svc
+      
+  project:  monitoring
+  syncPolicy:
+    automated: 
+      prune:  true
+      selfHeal: true
+  source:
+    chart:  datadog
+    repoURL:  https://helm.datadoghq.com
+    targetRevision: 3.81.0
+    helm:
+      valuesObject:
+        datadog:
+          apiKeyExistingSecret:  datadog-secret
+          site: datadoghq.eu
+          clusterName: ci-dev-green

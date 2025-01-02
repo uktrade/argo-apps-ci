@@ -1,0 +1,41 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: jenkins
+  namespace:  tools
+    
+spec:
+  destination:
+    namespace: tools
+    server: https://kubernetes.default.svc
+  project:  tools
+  syncPolicy:
+  source:
+    chart:  jenkins
+    repoURL:  https://charts.jenkins.io
+    targetRevision: 4.1.10
+    helm:
+      valuesObject:
+        controller:
+          tag: 2.346.1-lts-jdk11
+          javaOpts: -Dorg.jenkinsci.plugins.pipeline.modeldefinition.parser.RuntimeASTTransformer.SCRIPT_SPLITTING_TRANSFORMATION=true
+          installLatestPlugins: false
+          overwritePluginsFromImage: false
+          runAsUser: 0
+          resources: 
+            requests:
+              cpu: 500m
+              memory: 2Gi
+          tagLabel: jdk11
+          containerSecurityContext:
+            runAsUser: 0
+            readOnlyRootFilesystem: false
+          sidecars:
+            configAutoReload:
+              containerSecurityContext:
+                readOnlyRootFilesystem: false
+        persistence:
+          existingClaim: jenkins
+          size: 200Gi
+          accessMode: ReadWriteMany
+          storageClass: efs

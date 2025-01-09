@@ -22,11 +22,13 @@ spec:
           name: consul
           datacenter: dc1
         server:
+          disruptionBudget:
+            enabled: false
           replicas: 3
           bootstrapExpect: 3
           storage: 10Gi
           storageClass: gp2
-          affinity:
+          affinity: |
             podAntiAffinity:
               requiredDuringSchedulingIgnoredDuringExecution:
                 - labelSelector:
@@ -44,7 +46,7 @@ spec:
               memory: 100Mi
         client:
           enabled: true
-          tolerations:
+          tolerations: |
             - key: "worker-node"
               operator: "Exists"
               effect: "NoSchedule"

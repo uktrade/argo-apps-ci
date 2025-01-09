@@ -17,6 +17,17 @@ spec:
     helm:
       valuesObject:
         controller:
+          ingress:
+            enabled: true
+            ingressClassName: alb
+            annotations:
+              alb.ingress.kubernetes.io/scheme: internet-facing
+              alb.ingress.kubernetes.io/target-type: ip
+              alb.ingress.kubernetes.io/group.name: default
+              alb.ingress.kubernetes.io/healthcheck-protocol: HTTP
+              alb.ingress.kubernetes.io/listen-ports: '[{"HTTP": 80}, {"HTTPS":443}]'
+              alb.ingress.kubernetes.io/ssl-redirect: '443'
+              external-dns.alpha.kubernetes.io/hostname: jenkins.ci-dev.uktrade.digital
           tag: 2.346.1-lts-jdk11
           javaOpts: -Dorg.jenkinsci.plugins.pipeline.modeldefinition.parser.RuntimeASTTransformer.SCRIPT_SPLITTING_TRANSFORMATION=true
           installLatestPlugins: false

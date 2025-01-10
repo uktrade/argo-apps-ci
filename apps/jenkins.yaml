@@ -19,13 +19,12 @@ spec:
         controller:
           ingress:
             hostName: jenkins.ci-dev.uktrade.digital
-            paths: [
+            paths:
               - backend:
                   service:
                     name: jenkins
                     port:
                       number: 8080
-                    ]
                 pathType: ImplementationSpecific
             enabled: true
             ingressClassName: alb
